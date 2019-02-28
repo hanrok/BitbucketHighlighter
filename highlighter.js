@@ -20,7 +20,45 @@ var observeDOM = (function(){
   }
 })();
 
-function is_changed_by_me(codeLines, m) {
+fileExtensions = {
+	'js': 'javascript',
+	'py': 'python',
+	'rb': 'ruby',
+	'ps1': 'powershell',
+	'psm1': 'powershell',
+	'sh': 'bash',
+	'bat': 'batch',
+	'h': 'clike',
+	'tex': 'latex',
+	'c': 'clike',
+	'cpp': 'clike',
+	'ts': 'javascript'
+};
+
+function getFileNameOfCodeLine(codeLineElement) {
+	let parent = codeLineElement.parentElement;
+	while (true) {
+		parent = parent.parentElement;
+		if (parent.getAttribute('data-qa') !== null && parent.getAttribute('data-qa') == 'pr-diff-file-styles') {
+			return parent.firstElementChild.firstElementChild.innerText;
+		} else if (parent.id === 'root') {
+			return null;
+		}
+	}
+}
+
+function getCodeLanguage(codeLineElement) {
+	let filename = getFileNameOfCodeLine(codeLineElement);
+	let fileExtension = filename.split('.')[filename.split('.').length - 1];
+
+	if (fileExtension in fileExtensions) {
+		return fileExtensions[fileExtension];
+	}
+
+	return null;
+}
+
+function isChangedByMe(codeLines, m) {
 	for (let changedMutation of m) {
 		if (changedMutation.target == codeLines[0].lastElementChild) {
 			return true;
@@ -35,14 +73,15 @@ function highlightCode(m) {
 		return;
 	}
 
-	if (is_changed_by_me(codeLines, m)) {
+	if (isChangedByMe(codeLines, m)) {
 		return;
 	}
 
 	for (let e of codeLines) {
 		let codeElement = e.lastElementChild;
+		let lang = getCodeLanguage(codeElement) || 'markup';
 		codeElement.style.display = "block";
-		codeElement.innerHTML = Prism.highlight(codeElement.innerText, Prism.languages.python);
+		codeElement.innerHTML = Prism.highlight(codeElement.innerText, Prism.languages[lang]);
 	}
 }
 
