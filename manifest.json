@@ -1,0 +1,28 @@
+{
+	"name": "BitbucketHighlighter",
+	"version": "0.1",
+	"description": "Bitbucket PR syntax highlighter extension",
+	"permissions": [
+		"storage",
+		"declarativeContent",
+		"activeTab"
+	],
+	"content_scripts": [{
+		"matches": ["*://bitbucket.org/*/pull-requests/*"],
+		"js": [
+			"prism.js",
+			"highlighter.js"
+		],
+		"css": [
+			"prism.css"
+		]
+	}],
+	"background": {
+		"scripts": ["main.js"],
+		"persistent": false
+	},
+	"manifest_version": 2,
+	"page_action": {
+		"default_popup": "popup.html"
+	}
+}
