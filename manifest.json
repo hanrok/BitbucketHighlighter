@@ -1,6 +1,6 @@
 {
 	"name": "BitbucketHighlighter",
-	"version": "0.1",
+	"version": "0.1.1",
 	"description": "Bitbucket PR syntax highlighter extension",
 	"permissions": [
 		"storage",

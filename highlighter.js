@@ -79,6 +79,9 @@ function highlightCode(m) {
 
 	for (let e of codeLines) {
 		let codeElement = e.lastElementChild;
+		if (codeElement.innerText.includes("Feedback") && codeElement.innerText.includes("Feedback") && codeElement.innerText.includes("Feedback")) {
+			continue;
+		}
 		let lang = getCodeLanguage(codeElement) || 'markup';
 		codeElement.style.display = "block";
 		codeElement.innerHTML = Prism.highlight(codeElement.innerText, Prism.languages[lang]);
