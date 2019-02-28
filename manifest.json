@@ -21,8 +21,5 @@
 		"scripts": ["main.js"],
 		"persistent": false
 	},
-	"manifest_version": 2,
-	"page_action": {
-		"default_popup": "popup.html"
-	}
+	"manifest_version": 2
 }
