@@ -1,5 +1,5 @@
 {
-	"name": "BitbucketHighlighter",
+	"name": "Bitbucket Highlighter",
 	"version": "0.1.1",
 	"description": "Bitbucket PR syntax highlighter extension",
 	"permissions": [

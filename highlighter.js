@@ -67,26 +67,35 @@ function isChangedByMe(codeLines, m) {
 	return false;
 }
 
-function highlightCode(m) {
-	let codeLines = document.querySelectorAll("[data-qa=code-line]");
-	if (codeLines.length === 0) {
-		return;
-	}
+function isComment(codeElement) {
+	return codeElement.children && codeElement.children[0] && codeElement.children[0].children && codeElement.children[0].children[0] &&
+		codeElement.children[0].children[0].id && codeElement.children[0].children[0].id.includes("comment");
+}
 
-	if (isChangedByMe(codeLines, m)) {
+function highlightBlockOfCode(codeLines) {
+	if (codeLines.length === 0) {
 		return;
 	}
 
 	for (let e of codeLines) {
 		let codeElement = e.lastElementChild;
-		if (codeElement.innerText.includes("Feedback") && codeElement.innerText.includes("Feedback") && codeElement.innerText.includes("Feedback")) {
+		if (isComment(codeElement)) {
 			continue;
 		}
 		let lang = getCodeLanguage(codeElement) || 'markup';
 		codeElement.style.display = "block";
 		codeElement.innerHTML = Prism.highlight(codeElement.innerText, Prism.languages[lang]);
 	}
+
 }
+
+function highlightCode(mutations) {
+	for (m of mutations) {
+		highlightBlockOfCode(m.target.querySelectorAll('[data-qa=code-line]'));
+	}
+}
+
 
 let codeRoot = document.getElementById('root').firstElementChild.firstElementChild.firstElementChild.firstElementChild;
 observeDOM(codeRoot, highlightCode);
+highlightBlockOfCode(codeRoot.querySelectorAll('[data-qa=code-line]'))
