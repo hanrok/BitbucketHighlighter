@@ -32,7 +32,9 @@ fileExtensions = {
 	'tex': 'latex',
 	'c': 'clike',
 	'cpp': 'clike',
-	'ts': 'javascript'
+	'ts': 'javascript',
+	'css': 'css',
+	'scss': 'css'
 };
 
 function getFileNameOfCodeLine(codeLineElement) {

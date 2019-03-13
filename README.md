@@ -9,4 +9,4 @@ Currently the extension support:
 * Javascript
 * Markdown
 * C / C++
-
+* CS (SCSS)
