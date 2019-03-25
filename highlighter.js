@@ -70,8 +70,8 @@ function isChangedByMe(codeLines, m) {
 }
 
 function isComment(codeElement) {
-	return codeElement.children && codeElement.children[0] && codeElement.children[0].children && codeElement.children[0].children[0] &&
-		codeElement.children[0].children[0].id && codeElement.children[0].children[0].id.includes("comment");
+	return (codeElement.querySelectorAll('div>div>div>div>span>span[role=img]').length !== 0) ||
+		(codeElement.querySelectorAll("div[id^=comment]").length !== 0);
 }
 
 function highlightBlockOfCode(codeLines) {
