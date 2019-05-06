@@ -91,13 +91,51 @@ function highlightBlockOfCode(codeLines) {
 
 }
 
-function highlightCode(mutations) {
-	for (m of mutations) {
+function highlightNewUICode(mutations) {
+	for (let m of mutations) {
 		highlightBlockOfCode(m.target.querySelectorAll('[data-qa=code-line]'));
 	}
 }
 
+function highlightOldUICode(mutations) {
+	for (let m of mutations) {
+		// getting blocks
+		let blocks = m.target.querySelectorAll("section");
+		for (let block of blocks) {
+			// get title of the file
+			let filename = block.querySelector(".filename")
+			if (!block.querySelector(".filename")) {
+				continue;
+			}
+			filename = filename.innerText.split(" ")[1];
+			let fileExtension = filename.split('.')[filename.split('.').length - 1];
+			let languageCode = 'markup';
 
-let codeRoot = document.getElementById('root').firstElementChild.firstElementChild.firstElementChild.firstElementChild;
-observeDOM(codeRoot, highlightCode);
-highlightBlockOfCode(codeRoot.querySelectorAll('[data-qa=code-line]'))
+			if (fileExtension in fileExtensions) {
+				languageCode = fileExtensions[fileExtension];
+			}
+			for (let codeLine of block.querySelectorAll('.source')) {
+				codeLine.style.display = "block";
+				codeLine.innerHTML = Prism.highlight(codeLine.innerText, Prism.languages[languageCode]);
+			}
+		}
+	}
+}
+
+
+let codeRoot = document.getElementById('root');
+if (codeRoot !== null) {
+	codeRoot = codeRoot.firstElementChild.firstElementChild.firstElementChild.firstElementChild;
+	let blocks = codeRoot.querySelectorAll('[data-qa=code-line]')
+	observeDOM(codeRoot, highlightNewUICode);
+	highlightBlockOfCode(blocks)
+} else {
+	codeRoot = document.getElementById('pr-tab-content-wrapper')
+	blocks = codeRoot.querySelectorAll('.source');
+	observeDOM(codeRoot, highlightOldUICode);
+	highlightBlockOfCode(blocks)
+}
+
+
+
+
